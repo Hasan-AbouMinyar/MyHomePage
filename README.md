@@ -1,12 +1,23 @@
-# React + Vite
+# Hasan Abouminyar | Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository hosts the source code for my personal portfolio, a carefully crafted digital space designed to showcase my journey, skills, and projects as a web developer. The primary goal of this application is to provide an engaging and seamless user experience while presenting a comprehensive overview of my professional capabilities.
 
-Currently, two official plugins are available:
+**View the live portfolio:** [hasan-abouminyar.vercel.app](https://hasan-abouminyar.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Project Vision
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The portfolio is envisioned as more than just a collection of work; it is an interactive resume and a testament to my passion for development and design. It leverages modern web technologies to create a dynamic and memorable experience for visitors, reflecting a commitment to quality and innovation.
+
+---
+
+## Core Features & Architecture
+
+The application is built as a single-page application (SPA) to ensure fluid navigation and a cohesive user experience. Key architectural highlights include:
+
+*   **Component-Driven UI:** Built with **React**, allowing for a modular, scalable, and maintainable codebase.
+*   **Interactive 3D Graphics:** Utilizes **Three.js** and **React Three Fiber** to integrate compelling 3D models, adding a unique and interactive dimension to the user experience.
+*   **Fluid Animation & Transitions:** Employs **Framer Motion** to implement sophisticated animations and page transitions, enhancing visual appeal and user engagement.
+*   **Utility-First Styling:** Styled with **Tailwind CSS**, enabling rapid development and a consistent, modern design system.
+*   **Optimized Build Process:** Powered by **Vite** for an exceptionally fast development server and an optimized production build.
