@@ -2,23 +2,23 @@ import React from "react";
 
 const NewSkills = () => {
   const technicalSkills = [
+    { name: "Java" },
+    { name: "C" },
+    { name: "Python" },
     { name: "HTML" },
     { name: "CSS" },
     { name: "JavaScript" },
-    { name: "TypeScript" },
+    { name: "PHP" },
+    { name: "Dart" },
+    { name: "Laravel" },
+    { name: "Flutter" },
+    { name: "Vue JS" },
     { name: "React JS" },
-    { name: "Next.js" },
-    { name: "Three.js" },
-    { name: "GSAP" },
-    { name: "Framer Motion" },
     { name: "Git" },
     { name: "GitHub" },
-    { name: "Redux" },
     { name: "Tailwind CSS" },
-    { name: "Material UI" },
+    { name: "Bootstrap" },
     { name: "Figma" },
-    { name: "Firebase" },
-    { name: "Wordpress" },
   ];
 
   const softSkills = [
