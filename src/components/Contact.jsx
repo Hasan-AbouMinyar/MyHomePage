@@ -16,6 +16,9 @@ const Contact = () => {
       <div className="container mx-auto px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-16">
           <h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">Get In Touch</h2>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+            Open to new opportunities and collaborations—feel free to connect or reach out with any questions!
+          </p>
         </div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-center">
           {contacts.map((contact, i) => (
