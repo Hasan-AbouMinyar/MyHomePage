@@ -59,6 +59,9 @@ const Education = () => {
 					<h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
 						Get to know my Education.
 					</h2>
+					<p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+						A quick look at my academic background and achievements.
+					</p>
 				</div>
 				<div className="flex overflow-x-auto space-x-8 -mx-6 px-6 pb-8">
 					{educationData.map((item, index) => (
