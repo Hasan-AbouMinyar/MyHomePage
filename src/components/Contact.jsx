@@ -15,35 +15,35 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="min-h-screen bg-[#f5f5f7] dark:bg-black py-24 sm:py-32">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section id="contact" className="min-h-screen bg-white dark:bg-black py-24 sm:py-32 transition-colors duration-300">
+      <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
         <div className="max-w-2xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
             {t('contact.title')}
           </h2>
-          <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+          <p className="mt-4 text-sm md:text-base text-zinc-500 dark:text-zinc-400">
             {t('contact.subtitle')}
           </p>
         </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-center max-w-5xl mx-auto">
           {contacts.map((contact, i) => (
             <motion.a
               key={contact.name}
               href={contact.href}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="text-center"
+              className="text-center group block select-none"
             >
-              <contact.icon className="text-4xl text-zinc-700 dark:text-zinc-300 mx-auto mb-6" />
-              <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+              <contact.icon className="text-3xl text-zinc-400 dark:text-zinc-650 mx-auto mb-5 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-250" />
+              <h3 className="text-base font-semibold text-zinc-900 dark:text-white mb-2">
                 {t(`contact.labels.${contact.name}`)}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">{contact.value}</p>
-              <span className="text-blue-600 dark:text-blue-400 hover:underline">
+              <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 mb-3">{contact.value}</p>
+              <span className="text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-950 dark:group-hover:text-white underline transition-colors duration-250 uppercase">
                 {t('contact.connect')}
               </span>
             </motion.a>
