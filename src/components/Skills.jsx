@@ -10,7 +10,13 @@ const NewSkills = () => {
 
   return (
     <section id="skills" className="min-h-screen bg-white dark:bg-black text-zinc-800 dark:text-zinc-200 py-24 sm:py-32 flex items-center justify-center transition-colors duration-300">
-      <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        className="container mx-auto px-6 lg:px-8 max-w-6xl"
+      >
         
         {/* Header */}
         <div className="mb-16 md:mb-20">
@@ -32,12 +38,8 @@ const NewSkills = () => {
             </h3>
             <div className="space-y-8">
               {technicalSkills.map((skill, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-10%" }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="pb-8 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0"
                 >
                   <h4 className="text-lg font-medium text-zinc-900 dark:text-white mb-2.5">
@@ -46,7 +48,7 @@ const NewSkills = () => {
                   <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                     {skill.desc}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -59,12 +61,8 @@ const NewSkills = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-6">
               {softSkills.map((skill, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, x: lang === 'ar' ? 10 : -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
                   className="flex items-center gap-3"
                 >
                   {/* Elegant, clean bullet dot */}
@@ -72,14 +70,14 @@ const NewSkills = () => {
                   <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors duration-200 select-none">
                     {skill}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
 
         </div>
 
-      </div>
+      </motion.div>
     </section>
   );
 };

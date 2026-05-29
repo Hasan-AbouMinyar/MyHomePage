@@ -7,10 +7,6 @@ import ufsImage from '../assets/UFS.png';
 const ImageShowcase = ({ src, title }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6 }}
       whileHover={{ y: -6 }}
       className="w-full relative rounded-xl border border-zinc-150 dark:border-zinc-900 bg-zinc-50 dark:bg-zinc-950 overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.03)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] aspect-[16/10] group cursor-pointer"
     >
@@ -27,7 +23,6 @@ const Projects = () => {
   const { t, lang } = useLanguage();
   const projects = t('projects.items') || [];
   const projectImages = [lpaImage, ufsImage];
-  const projectUrls = ["lpa.gov.ly", "hrms.police.gov.ly"];
   const projectLabels = ["01 / ENTERPRISE SYSTEM", "02 / ON-PREMISE APPLICATION"];
 
   return (
@@ -37,20 +32,20 @@ const Projects = () => {
         return (
           <section
             key={index}
-            className="min-h-screen lg:h-screen w-full flex items-center justify-center snap-start relative bg-white dark:bg-black px-6 md:px-12 lg:px-24 py-20 lg:py-0 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0"
+            className="min-h-screen lg:h-screen w-full flex items-center justify-center snap-start relative bg-white dark:bg-black px-6 md:px-12 lg:px-24 py-20 lg:py-0 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0 overflow-hidden"
           >
-            <div className={`container mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full ${
-              isEven ? '' : 'lg:flex-row-reverse'
-            }`}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              className={`container mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full ${
+                isEven ? '' : 'lg:flex-row-reverse'
+              }`}
+            >
               
               {/* Text Narrative Column */}
-              <motion.div
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6 }}
-                className="w-full lg:w-[38%] xl:w-[35%] flex flex-col justify-center text-left rtl:text-right"
-              >
+              <div className="w-full lg:w-[38%] xl:w-[35%] flex flex-col justify-center text-left rtl:text-right">
                 <span className="text-[10px] md:text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase mb-4 block">
                   {projectLabels[index]}
                 </span>
@@ -86,7 +81,7 @@ const Projects = () => {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
               {/* Showcase Image Column */}
               <div className="w-full lg:w-[62%] xl:w-[65%] flex items-center justify-center">
@@ -96,7 +91,7 @@ const Projects = () => {
                 />
               </div>
 
-            </div>
+            </motion.div>
           </section>
         );
       })}

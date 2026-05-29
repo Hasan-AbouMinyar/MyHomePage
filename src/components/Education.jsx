@@ -5,12 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 const internationalCollege = new URL('../assets/2.png', import.meta.url).href;
 const softwareEngineer= new URL('../assets/1.png', import.meta.url).href;
 
-const EducationCard = ({ item, image, index }) => (
-	<motion.div
-		initial={{ opacity: 0, x: 50 }}
-		whileInView={{ opacity: 1, x: 0 }}
-		viewport={{ once: true, amount: 0.2 }}
-		transition={{ duration: 0.6, delay: index * 0.1 }}
+const EducationCard = ({ item, image }) => (
+	<div
 		className="relative flex-shrink-0 w-[320px] h-[560px] rounded-3xl overflow-hidden shadow-2xl group"
 	>
 		<img
@@ -31,7 +27,7 @@ const EducationCard = ({ item, image, index }) => (
 				</button>
 			</div>
 		</div>
-	</motion.div>
+	</div>
 );
 
 const Education = () => {
@@ -44,7 +40,13 @@ const Education = () => {
 			id="education"
 			className="min-h-screen bg-white dark:bg-black py-24 sm:py-32 overflow-hidden"
 		>
-			<div className="container mx-auto px-6 lg:px-8">
+			<motion.div
+				initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+				whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+				viewport={{ once: false, amount: 0.15 }}
+				transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+				className="container mx-auto px-6 lg:px-8"
+			>
 				<div className="mb-12">
 					<h2 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
 						{t('education.title')}
@@ -59,11 +61,10 @@ const Education = () => {
 							key={index} 
 							item={item} 
 							image={educationImages[index]} 
-							index={index} 
 						/>
 					))}
 				</div>
-			</div>
+			</motion.div>
 		</section>
 	);
 };

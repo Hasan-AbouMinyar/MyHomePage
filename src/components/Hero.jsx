@@ -75,9 +75,9 @@ const Hero = ({ darkMode }) => {
         </Canvas>
       </div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
+        initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         className="relative z-10 text-center px-4"
       >
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-zinc-900 dark:text-white">{t('name')}</h1>

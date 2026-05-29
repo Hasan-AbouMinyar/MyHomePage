@@ -6,13 +6,13 @@ const About = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="about" className="min-h-screen bg-white dark:bg-black text-zinc-800 dark:text-zinc-200 flex flex-col justify-center">
+    <section id="about" className="min-h-screen bg-white dark:bg-black text-zinc-800 dark:text-zinc-200 flex flex-col justify-center overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8 py-24 sm:py-32">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+          whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl mb-8">{t('about.title')}</h2>

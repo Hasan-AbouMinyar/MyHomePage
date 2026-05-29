@@ -98,7 +98,7 @@ export const translations = {
       subtitle: "Open to new opportunities and collaborations—feel free to connect or reach out with any questions!",
       connect: "Connect >",
       labels: {
-        Phone: "Phone",
+        WhatsApp: "WhatsApp",
         Email: "Email",
         Facebook: "Facebook",
         LinkedIn: "LinkedIn",
@@ -209,7 +209,7 @@ export const translations = {
       subtitle: "مستعد دائماً لمناقشة فرص التعاون والمشاريع الجديدة—لا تتردد في التواصل معي أو طرح أي استفسار!",
       connect: "تواصل معي >",
       labels: {
-        Phone: "الهاتف",
+        WhatsApp: "واتساب",
         Email: "البريد الإلكتروني",
         Facebook: "فيسبوك",
         LinkedIn: "لينكد إن",
