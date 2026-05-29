@@ -1,25 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 const internationalCollege = new URL('../assets/2.png', import.meta.url).href;
 const softwareEngineer= new URL('../assets/1.png', import.meta.url).href;
 
-const educationData = [
-	{
-		institution: 'University of Tripoli',
-		degree: 'Software Engineering',
-		department: 'Faculty of Information Technology',
-		image: softwareEngineer,
-	},
-	{
-		institution: 'International College for Languages',
-		degree: 'High Diploma in English Language',
-		department: 'English Language Department',
-		image: internationalCollege,
-	},
-];
-
-const EducationCard = ({ item, index }) => (
+const EducationCard = ({ item, image, index }) => (
 	<motion.div
 		initial={{ opacity: 0, x: 50 }}
 		whileInView={{ opacity: 1, x: 0 }}
@@ -28,7 +14,7 @@ const EducationCard = ({ item, index }) => (
 		className="relative flex-shrink-0 w-[320px] h-[560px] rounded-3xl overflow-hidden shadow-2xl group"
 	>
 		<img
-			src={item.image}
+			src={image}
 			alt={item.institution}
 			className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
 		/>
@@ -49,23 +35,32 @@ const EducationCard = ({ item, index }) => (
 );
 
 const Education = () => {
+	const { t } = useLanguage();
+	const educationItems = t('education.items') || [];
+	const educationImages = [softwareEngineer, internationalCollege];
+
 	return (
 		<section
 			id="education"
-			className="min-h-screen bg-gray-100 dark:bg-gradient-to-br from-dark-start via-dark-mid to-dark-end py-24 sm:py-32 overflow-hidden"
+			className="min-h-screen bg-white dark:bg-black py-24 sm:py-32 overflow-hidden"
 		>
 			<div className="container mx-auto px-6 lg:px-8">
 				<div className="mb-12">
-					<h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-						Get to know my Education.
+					<h2 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
+						{t('education.title')}
 					</h2>
-					<p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-						A quick look at my academic background and achievements.
+					<p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+						{t('education.subtitle')}
 					</p>
 				</div>
-				<div className="flex overflow-x-auto space-x-8 -mx-6 px-6 pb-8">
-					{educationData.map((item, index) => (
-						<EducationCard key={index} item={item} index={index} />
+				<div className="flex overflow-x-auto gap-8 pb-8 scrollbar-none">
+					{educationItems.map((item, index) => (
+						<EducationCard 
+							key={index} 
+							item={item} 
+							image={educationImages[index]} 
+							index={index} 
+						/>
 					))}
 				</div>
 			</div>

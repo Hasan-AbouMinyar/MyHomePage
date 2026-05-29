@@ -24,15 +24,15 @@ function App() {
   };
 
   return (
-    <main className="bg-white dark:bg-black antialiased">
+    <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth scrollbar-none">
       <Navbar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
-      <Hero />
-      <About />
-      <NewSkills />
+      <div className="snap-start h-screen w-full relative"><Hero darkMode={darkMode} /></div>
+      <div className="snap-start"><About /></div>
+      <div className="snap-start"><NewSkills /></div>
       <Projects />
-      <Education />
-      <Contact />
-      <Footer />
+      <div className="snap-start"><Education /></div>
+      <div className="snap-start"><Contact /></div>
+      <div className="snap-start"><Footer /></div>
     </main>
   );
 }

@@ -1,60 +1,86 @@
 import React from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { motion } from "framer-motion";
 
 const NewSkills = () => {
-  const technicalSkills = [
-    { name: "Java" },
-    { name: "C" },
-    { name: "Python" },
-    { name: "HTML" },
-    { name: "CSS" },
-    { name: "JavaScript" },
-    { name: "PHP" },
-    { name: "Dart" },
-    { name: "Laravel" },
-    { name: "Flutter" },
-    { name: "Vue JS" },
-    { name: "React JS" },
-    { name: "Git" },
-    { name: "GitHub" },
-    { name: "Tailwind CSS" },
-    { name: "Bootstrap" },
-    { name: "Figma" },
-  ];
+  const { lang, t } = useLanguage();
 
-  const softSkills = [
-    "Analytical Thinking",
-    "Time & Task Management",
-    "Effective Communication",
-    "Persistence & Problem Solving",
-    "Self-Learning",
-    "Creativity & Design Thinking",
-    "Teamwork & Collaboration",
-  ];
+  const technicalSkills = t('skills.techList') || [];
+  const softSkills = t('skills.soft') || [];
 
   return (
-    <div id="skills" className="min-h-screen bg-gray-100 dark:bg-black text-black dark:text-white p-10 flex items-center justify-center">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-5xl font-bold mb-10 text-center">Technical and Soft Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="font-bold text-lg mb-4">Technical Skills</h3>
-            <ul className="space-y-2">
-              {technicalSkills.map((skill, index) => (
-                <li key={index}>{skill.name}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg mb-4">Soft Skills</h3>
-            <ul className="space-y-2">
-              {softSkills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          </div>
+    <section id="skills" className="min-h-screen bg-white dark:bg-black text-zinc-800 dark:text-zinc-200 py-24 sm:py-32 flex items-center justify-center transition-colors duration-300">
+      <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
+        
+        {/* Header */}
+        <div className="mb-16 md:mb-20">
+          <span className="text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase block mb-3">
+            {t('skills.title') ? 'CAPABILITIES' : ''}
+          </span>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+            {t('skills.title')}
+          </h2>
         </div>
+
+        {/* 2-Column Split Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+          
+          {/* Left Column: Technical Skills (Borderless divider list) */}
+          <div className="md:col-span-7 space-y-8">
+            <h3 className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pb-2 border-b border-zinc-100 dark:border-zinc-900">
+              {t('skills.techTitle')}
+            </h3>
+            <div className="space-y-8">
+              {technicalSkills.map((skill, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="pb-8 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0"
+                >
+                  <h4 className="text-lg font-medium text-zinc-900 dark:text-white mb-2.5">
+                    {skill.name}
+                  </h4>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    {skill.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Soft Skills (Borderless, pure typography list) */}
+          <div className="md:col-span-5 space-y-8">
+            <h3 className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pb-2 border-b border-zinc-100 dark:border-zinc-900">
+              {t('skills.softTitle')}
+            </h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-6">
+              {softSkills.map((skill, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: lang === 'ar' ? 10 : -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="flex items-center gap-3"
+                >
+                  {/* Elegant, clean bullet dot */}
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 flex-shrink-0" />
+                  <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors duration-200 select-none">
+                    {skill}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 };
 

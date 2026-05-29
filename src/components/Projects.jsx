@@ -1,167 +1,106 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import sbidroImage from '../assets/sbidro.png'; // استيراد الصورة
-import tatawoeImage from '../assets/tatawoe.png'; // استيراد صورة مشروع تاتاوو
-import rkunImage from '../assets/rkun.png'; // استيراد صورة مشروع ركون
+import { useLanguage } from '../context/LanguageContext';
+import lpaImage from '../assets/lpa.jpeg';
+import ufsImage from '../assets/UFS.png';
 
-// مكون الأكورديون الفرعي
-const AccordionItem = ({ title, content, isOpen, onToggle }) => {
+const ImageShowcase = ({ src, title }) => {
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 py-4">
-      <button
-        onClick={onToggle}
-        className="w-full flex justify-between items-center text-left"
-      >
-        <span className="text-2xl font-semibold text-gray-800 dark:text-white">{title}</span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="text-gray-500"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </motion.div>
-      </button>
-      <motion.div
-        initial={false}
-        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
-        className="overflow-hidden"
-      >
-        <div className="pt-4 text-lg text-gray-600 dark:text-gray-300">
-          {content}
-        </div>
-      </motion.div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6 }}
+      whileHover={{ y: -6 }}
+      className="w-full relative rounded-xl border border-zinc-150 dark:border-zinc-900 bg-zinc-50 dark:bg-zinc-950 overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.03)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] aspect-[16/10] group cursor-pointer"
+    >
+      <img 
+        src={src} 
+        alt={title} 
+        className="w-full h-full object-cover object-top select-none pointer-events-none transition-transform duration-700 group-hover:scale-105" 
+      />
+    </motion.div>
   );
 };
 
-
 const Projects = () => {
-  const [openAccordion, setOpenAccordion] = useState(0);
-
-  const sbidroFeatures = [
-    {
-      title: "A Unique Shopping Experience",
-      content: "Enjoy fast performance and smooth Browse with a modern interface designed for you."
-    },
-    {
-      title: "Easy Management",
-      content: "Easily organize your favorites, track your orders, and pay securely in a few simple steps."
-    },
-    {
-      title: "Stay Updated",
-      content: "Turn on notifications to be the first to know about new arrivals and exclusive offers."
-    }
-  ];
+  const { t, lang } = useLanguage();
+  const projects = t('projects.items') || [];
+  const projectImages = [lpaImage, ufsImage];
+  const projectUrls = ["lpa.gov.ly", "hrms.police.gov.ly"];
+  const projectLabels = ["01 / ENTERPRISE SYSTEM", "02 / ON-PREMISE APPLICATION"];
 
   return (
-    <section id="projects" className="min-h-screen bg-gray-100 dark:bg-gradient-to-br from-dark-start via-dark-mid to-dark-end py-24 sm:py-32">
-      <div className="container mx-auto px-6 lg:px-8">
-        {/* قسم مشروع Sbidro */}
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">My Projects</h2>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-            Here's a selection of projects I've worked on. Each one presented unique challenges and opportunities for growth, from e-commerce solutions to community-driven platforms.
-          </p>
-        </div>
-
-        <div className="flex flex-col lg:flex-row items-center gap-12 mb-24">
-          {/* الجانب الأيسر: الأكورديون */}
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.8 }}
-            className="w-full lg:w-1/2"
+    <div id="projects" className="w-full bg-white dark:bg-black transition-colors duration-300">
+      {projects.map((project, index) => {
+        const isEven = index % 2 === 0;
+        return (
+          <section
+            key={index}
+            className="min-h-screen lg:h-screen w-full flex items-center justify-center snap-start relative bg-white dark:bg-black px-6 md:px-12 lg:px-24 py-20 lg:py-0 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0"
           >
-            <h3 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Sbidro</h3>
-            {sbidroFeatures.map((feature, index) => (
-              <AccordionItem 
-                key={index}
-                title={feature.title}
-                content={feature.content}
-                isOpen={openAccordion === index}
-                onToggle={() => setOpenAccordion(openAccordion === index ? -1 : index)}
-              />
-            ))}
-          </motion.div>
+            <div className={`container mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full ${
+              isEven ? '' : 'lg:flex-row-reverse'
+            }`}>
+              
+              {/* Text Narrative Column */}
+              <motion.div
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6 }}
+                className="w-full lg:w-[38%] xl:w-[35%] flex flex-col justify-center text-left rtl:text-right"
+              >
+                <span className="text-[10px] md:text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase mb-4 block">
+                  {projectLabels[index]}
+                </span>
+                
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white leading-tight mb-4 tracking-tight">
+                  {project.title}
+                </h3>
+                
+                <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 mb-8 leading-relaxed">
+                  {project.description}
+                </p>
 
-          {/* الجانب الأيمن: الصورة */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.8 }}
-            className="w-full lg:w-1/2 mt-12 lg:mt-0"
-          >
-            <img src={sbidroImage} alt="Sbidro App" className="rounded-2xl shadow-2xl w-full h-auto object-contain" />
-          </motion.div>
-        </div>
+                {/* Numbered Accomplishments Grid */}
+                <div className="space-y-5 mb-8">
+                  {project.achievements.map((achievement, i) => (
+                    <div key={i} className="flex gap-4 items-start group">
+                      <span className="text-sm font-semibold font-mono text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-250 leading-none select-none">
+                        {lang === 'ar' ? `٠${i + 1}` : `0${i + 1}`}
+                      </span>
+                      <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        {achievement}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-        {/* Divider */}
-        <div className="border-b border-gray-200 dark:border-gray-700 my-24"></div>
+                {/* Outlined Tech Tags (Classic separator style instead of capsules) */}
+                <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-xs font-mono text-zinc-400 dark:text-zinc-500 select-none">
+                  {project.tags.map((tag, i) => (
+                    <span key={i} className="flex items-center">
+                      {tag}
+                      {i < project.tags.length - 1 && <span className="mx-2 text-zinc-200 dark:text-zinc-800 font-sans">·</span>}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
 
-        {/* قسم مشروع تاتاوو */}
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h3 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-            Tatawoe: Volunteer Simply. Make an Impact.
-          </h3>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-            Discover volunteer opportunities near you and be part of a positive change.
-            Browse events, apply with a single tap, and easily manage all your activities.
-            Connect with organizations, rate your experience, and build your volunteer profile.
-            Join a community of changemakers.
-          </p>
-        </div>
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-5xl mx-auto"
-        >
-          <div className="rounded-2xl shadow-2xl overflow-hidden">
-            <img
-              src={tatawoeImage}
-              alt="Tatawoe Project"
-              className="w-full h-auto object-cover"
-            />
-          </div>
-        </motion.div>
+              {/* Showcase Image Column */}
+              <div className="w-full lg:w-[62%] xl:w-[65%] flex items-center justify-center">
+                <ImageShowcase
+                  src={projectImages[index]}
+                  title={project.title}
+                />
+              </div>
 
-        {/* Divider */}
-        <div className="border-b border-gray-200 dark:border-gray-700 my-24"></div>
-
-        {/* قسم مشروع ركون */}
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h3 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-            Rkun: Your Business in Your Pocket
-          </h3>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-            Manage your entire business from one simple, powerful dashboard.
-            Track sales, monitor inventory, and manage customers and suppliers with ease.
-            Get real-time insights and key stats to make smarter, data-driven decisions.
-          </p>
-        </div>
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-5xl mx-auto"
-        >
-          <div className="rounded-2xl shadow-2xl overflow-hidden">
-            <img
-              src={rkunImage}
-              alt="Rkun Project"
-              className="w-full h-auto object-cover"
-            />
-          </div>
-        </motion.div>
-      </div>
-    </section>
+            </div>
+          </section>
+        );
+      })}
+    </div>
   );
 };
 
