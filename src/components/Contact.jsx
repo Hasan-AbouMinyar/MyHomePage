@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram, FaTiktok, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 
 const Contact = () => {
@@ -12,6 +12,7 @@ const Contact = () => {
     { name: "Facebook", value: "Hasan Abouminyar", icon: FaFacebook, href: "https://www.facebook.com/abouminyar/" },
     { name: "Instagram", value: "@_.abouminyar._", icon: FaInstagram, href: "https://www.instagram.com/_.abouminyar._/" },
     { name: "TikTok", value: "@abouminyar", icon: FaTiktok, href: "https://www.tiktok.com/@abouminyar" },
+    { name: "YouTube", value: "@abouminyar", icon: FaYoutube, href: "https://www.youtube.com/@abouminyar" },
     { name: "LinkedIn", value: "Hasan Abouminyar", icon: FaLinkedin, href: "https://www.linkedin.com/in/hasan-abouminyar-8b552b248/" },
     { name: "GitHub", value: "Hasan-AbouMinyar", icon: FaGithub, href: "https://github.com/Hasan-AbouMinyar" }
   ];

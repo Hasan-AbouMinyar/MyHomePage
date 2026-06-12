@@ -103,6 +103,7 @@ export const translations = {
         Facebook: "Facebook",
         Instagram: "Instagram",
         TikTok: "TikTok",
+        YouTube: "YouTube",
         LinkedIn: "LinkedIn",
         GitHub: "GitHub"
       }
@@ -216,6 +217,7 @@ export const translations = {
         Facebook: "فيسبوك",
         Instagram: "إنستغرام",
         TikTok: "تيك توك",
+        YouTube: "يوتيوب",
         LinkedIn: "لينكد إن",
         GitHub: "جيت هاب"
       }
