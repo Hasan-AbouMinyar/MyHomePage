@@ -101,6 +101,8 @@ export const translations = {
         WhatsApp: "WhatsApp",
         Email: "Email",
         Facebook: "Facebook",
+        Instagram: "Instagram",
+        TikTok: "TikTok",
         LinkedIn: "LinkedIn",
         GitHub: "GitHub"
       }
@@ -212,6 +214,8 @@ export const translations = {
         WhatsApp: "واتساب",
         Email: "البريد الإلكتروني",
         Facebook: "فيسبوك",
+        Instagram: "إنستغرام",
+        TikTok: "تيك توك",
         LinkedIn: "لينكد إن",
         GitHub: "جيت هاب"
       }

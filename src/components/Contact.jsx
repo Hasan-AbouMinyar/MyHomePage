@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaWhatsapp, FaEnvelope, FaFacebook, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram, FaTiktok, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 
 const Contact = () => {
@@ -9,7 +9,9 @@ const Contact = () => {
   const contacts = [
     { name: "WhatsApp", value: "+218 92 421 4929", icon: FaWhatsapp, href: "https://wa.me/218924214929" },
     { name: "Email", value: "h.abouminyar@gmail.com", icon: FaEnvelope, href: "mailto:h.abouminyar@gmail.com" },
-    { name: "Facebook", value: "Hasan Abouminyar", icon: FaFacebook, href: "https://www.facebook.com/aboumniyar" },
+    { name: "Facebook", value: "Hasan Abouminyar", icon: FaFacebook, href: "https://www.facebook.com/abouminyar/" },
+    { name: "Instagram", value: "@_.abouminyar._", icon: FaInstagram, href: "https://www.instagram.com/_.abouminyar._/" },
+    { name: "TikTok", value: "@abouminyar", icon: FaTiktok, href: "https://www.tiktok.com/@abouminyar" },
     { name: "LinkedIn", value: "Hasan Abouminyar", icon: FaLinkedin, href: "https://www.linkedin.com/in/hasan-abouminyar-8b552b248/" },
     { name: "GitHub", value: "Hasan-AbouMinyar", icon: FaGithub, href: "https://github.com/Hasan-AbouMinyar" }
   ];
