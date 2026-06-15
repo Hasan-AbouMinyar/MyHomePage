@@ -8,11 +8,13 @@ import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
+import Preloader from './components/Preloader';
 import { isAdminPath } from './lib/supabaseApi';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   useEffect(() => {
     if (darkMode) {
@@ -51,24 +53,28 @@ function App() {
   }
 
   return (
-    <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth scrollbar-none relative">
-      {/* Razor-thin scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-[2px] z-50 pointer-events-none">
-        <div 
-          className="h-full bg-zinc-900 dark:bg-white transition-all duration-75"
-          style={{ width: `${scrollProgress * 100}%` }}
-        />
-      </div>
+    <>
+      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
 
-      <Navbar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
-      <div className="snap-start h-screen w-full relative"><Hero darkMode={darkMode} /></div>
-      <div className="snap-start"><About /></div>
-      <div className="snap-start"><NewSkills /></div>
-      <Projects />
-      <div className="snap-start"><Education /></div>
-      <div className="snap-start"><Contact /></div>
-      <div className="snap-start"><Footer /></div>
-    </main>
+      <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth scrollbar-none relative">
+        {/* Razor-thin scroll progress bar */}
+        <div className="fixed top-0 left-0 right-0 h-[2px] z-50 pointer-events-none">
+          <div 
+            className="h-full bg-zinc-900 dark:bg-white transition-all duration-75"
+            style={{ width: `${scrollProgress * 100}%` }}
+          />
+        </div>
+
+        <Navbar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+        <div className="snap-start h-screen w-full relative"><Hero darkMode={darkMode} /></div>
+        <div className="snap-start"><About /></div>
+        <div className="snap-start"><NewSkills /></div>
+        <Projects />
+        <div className="snap-start"><Education /></div>
+        <div className="snap-start"><Contact /></div>
+        <div className="snap-start"><Footer /></div>
+      </main>
+    </>
   );
 }
 
