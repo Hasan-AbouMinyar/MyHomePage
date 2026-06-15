@@ -7,6 +7,8 @@ import Projects from './components/Projects';
 import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import AdminDashboard from './components/AdminDashboard';
+import { isAdminPath } from './lib/supabaseApi';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -43,6 +45,10 @@ function App() {
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
+
+  if (isAdminPath()) {
+    return <AdminDashboard darkMode={darkMode} toggleDarkMode={toggleDarkMode} />;
+  }
 
   return (
     <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth scrollbar-none relative">

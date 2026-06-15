@@ -3,7 +3,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 
 const NewSkills = () => {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
 
   const technicalSkills = t('skills.techList') || [];
   const softSkills = t('skills.soft') || [];

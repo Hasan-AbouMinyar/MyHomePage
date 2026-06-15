@@ -1,6 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaGithub } from 'react-icons/fa';
+import {
+  FaEnvelope,
+  FaFacebook,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaTiktok,
+  FaWhatsapp,
+  FaYoutube,
+} from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 
 const Contact = () => {
@@ -43,12 +52,12 @@ const Contact = () => {
               rel="noopener noreferrer"
               className="text-center group block select-none"
             >
-              <contact.icon className="text-3xl text-zinc-400 dark:text-zinc-650 mx-auto mb-5 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-250" />
+              <contact.icon className="text-3xl text-zinc-400 dark:text-zinc-500 mx-auto mb-5 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-200" />
               <h3 className="text-base font-semibold text-zinc-900 dark:text-white mb-2">
                 {t(`contact.labels.${contact.name}`)}
               </h3>
               <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 mb-3">{contact.value}</p>
-              <span className="text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-950 dark:group-hover:text-white underline transition-colors duration-250 uppercase">
+              <span className="text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-950 dark:group-hover:text-white underline transition-colors duration-200 uppercase">
                 {t('contact.connect')}
               </span>
             </a>
