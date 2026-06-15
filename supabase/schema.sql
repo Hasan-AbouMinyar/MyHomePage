@@ -155,3 +155,64 @@ using (true);
 grant usage on schema public to anon, authenticated;
 grant insert on public.contact_messages to anon, authenticated;
 grant select, update, delete on public.contact_messages to authenticated;
+
+-- Realtime interactive sticky notes wall.
+create table if not exists public.guestbook_notes (
+  id uuid primary key default gen_random_uuid(),
+  content text not null check (char_length(btrim(content)) between 1 and 100),
+  color text not null default '#FEF08A' check (color in ('#FEF08A', '#FBCFE8', '#BFDBFE', '#BBF7D0')),
+  x_position double precision not null default 24,
+  y_position double precision not null default 24,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists guestbook_notes_created_at_idx
+  on public.guestbook_notes (created_at asc);
+
+alter table public.guestbook_notes enable row level security;
+
+drop policy if exists "guestbook_notes_select_public" on public.guestbook_notes;
+create policy "guestbook_notes_select_public"
+on public.guestbook_notes
+for select
+to anon, authenticated
+using (true);
+
+drop policy if exists "guestbook_notes_insert_public" on public.guestbook_notes;
+create policy "guestbook_notes_insert_public"
+on public.guestbook_notes
+for insert
+to anon, authenticated
+with check (
+  char_length(btrim(content)) between 1 and 100
+  and color in ('#FEF08A', '#FBCFE8', '#BFDBFE', '#BBF7D0')
+);
+
+drop policy if exists "guestbook_notes_update_position_public" on public.guestbook_notes;
+create policy "guestbook_notes_update_position_public"
+on public.guestbook_notes
+for update
+to anon, authenticated
+using (true)
+with check (true);
+
+grant select, insert on public.guestbook_notes to anon, authenticated;
+grant update (x_position, y_position) on public.guestbook_notes to anon, authenticated;
+
+do $$
+begin
+  if exists (
+    select 1
+    from pg_publication
+    where pubname = 'supabase_realtime'
+  ) and not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'guestbook_notes'
+  ) then
+    execute 'alter publication supabase_realtime add table public.guestbook_notes';
+  end if;
+end;
+$$;

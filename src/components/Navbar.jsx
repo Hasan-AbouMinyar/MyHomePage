@@ -9,6 +9,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
     { id: "skills", key: "nav.skills" },
     { id: "projects", key: "nav.projects" },
     { id: "education", key: "nav.education" },
+    { id: "guestbook", key: "nav.guestbook" },
     { id: "contact", key: "nav.contact" }
   ];
 
@@ -17,7 +18,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
 
   // Intersection Observer for scroll spy (Active section tracking)
   useEffect(() => {
-    const sectionIds = ["about", "skills", "projects", "education", "contact"];
+    const sectionIds = ["about", "skills", "projects", "education", "guestbook", "contact"];
     const allIds = ["hero", ...sectionIds];
     
     const observerOptions = {

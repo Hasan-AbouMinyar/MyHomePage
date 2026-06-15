@@ -5,6 +5,7 @@ import About from './components/About';
 import NewSkills from './components/Skills';
 import Projects from './components/Projects';
 import Education from './components/Education';
+import GuestbookNotesWall from './components/GuestbookNotesWall';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
@@ -71,6 +72,7 @@ function App() {
         <div className="snap-start"><NewSkills /></div>
         <Projects />
         <div className="snap-start"><Education /></div>
+        <div className="snap-start"><GuestbookNotesWall /></div>
         <div className="snap-start"><Contact /></div>
         <div className="snap-start"><Footer /></div>
       </main>

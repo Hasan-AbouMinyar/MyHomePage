@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js';
 import { getClientFingerprint } from './security';
 
 const normalizeSupabaseUrl = (url) =>
@@ -12,6 +13,7 @@ const SUPABASE_URL = normalizeSupabaseUrl(rawSupabaseUrl);
 const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const ADMIN_SESSION_KEY = 'portfolio_admin_session';
+let supabaseClient = null;
 
 export const normalizeAdminPath = (path) => {
   const cleanPath = path || '/admin';
@@ -48,6 +50,21 @@ const ensureSupabaseConfigured = () => {
   if (!isSupabaseConfigured()) {
     throw new SupabaseConfigError();
   }
+};
+
+export const getSupabaseClient = () => {
+  ensureSupabaseConfigured();
+
+  if (!supabaseClient) {
+    supabaseClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }
+
+  return supabaseClient;
 };
 
 const parseResponse = async (response) => {
