@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
 import { FaPaperPlane, FaPlus, FaTimes } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,6 +7,12 @@ import { getSupabaseClient, getSupabaseConfigStatus } from '../lib/supabaseApi';
 const MAX_NOTE_CHARS = 100;
 const DEFAULT_NOTE_COLOR = '#FEF08A';
 const NOTE_ROTATIONS = [-2.5, 1.8, -1.4, 2.4, -0.8];
+const POSITION_MARGIN = 8;
+const DEFAULT_POSITION_RATIO = 0.04;
+const DESKTOP_NOTE_SIZE = 176;
+const MOBILE_NOTE_MIN_SIZE = 112;
+const MOBILE_NOTE_MAX_SIZE = 160;
+const MOBILE_NOTE_VIEWPORT_RATIO = 0.34;
 
 const NOTE_COLORS = [
   { key: 'yellow', hex: '#FEF08A' },
@@ -19,12 +25,57 @@ const selectColumns = 'id,content,color,x_position,y_position,created_at';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+const getFiniteNumber = (value, fallback) => {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+};
+
+const isRatioPosition = (position) => position >= 0 && position <= 1;
+
+const getPositionBounds = (containerSize, itemSize) => {
+  const max = Math.max(POSITION_MARGIN, containerSize - itemSize - POSITION_MARGIN);
+  return { min: POSITION_MARGIN, max };
+};
+
+const toPixelPosition = (position, containerSize, itemSize) => {
+  const { min, max } = getPositionBounds(containerSize, itemSize);
+  const safePosition = getFiniteNumber(position, DEFAULT_POSITION_RATIO);
+
+  if (isRatioPosition(safePosition)) {
+    return clamp(min + safePosition * (max - min), min, max);
+  }
+
+  return clamp(safePosition, min, max);
+};
+
+const toStoredPosition = (pixelPosition, containerSize, itemSize) => {
+  const { min, max } = getPositionBounds(containerSize, itemSize);
+  const range = max - min;
+  const constrainedPosition = clamp(pixelPosition, min, max);
+
+  if (range <= 0) return 0;
+
+  return Number(((constrainedPosition - min) / range).toFixed(6));
+};
+
+const getResponsiveNoteSize = () => {
+  if (typeof window === 'undefined' || window.matchMedia('(min-width: 640px)').matches) {
+    return DESKTOP_NOTE_SIZE;
+  }
+
+  return clamp(
+    window.innerWidth * MOBILE_NOTE_VIEWPORT_RATIO,
+    MOBILE_NOTE_MIN_SIZE,
+    MOBILE_NOTE_MAX_SIZE
+  );
+};
+
 const normalizeNote = (note) => ({
   id: note.id,
   content: note.content || '',
   color: NOTE_COLORS.some((item) => item.hex === note.color) ? note.color : DEFAULT_NOTE_COLOR,
-  x_position: Number(note.x_position) || 24,
-  y_position: Number(note.y_position) || 24,
+  x_position: getFiniteNumber(note.x_position, DEFAULT_POSITION_RATIO),
+  y_position: getFiniteNumber(note.y_position, DEFAULT_POSITION_RATIO),
   created_at: note.created_at,
 });
 
@@ -40,11 +91,11 @@ const upsertNote = (notes, incomingNote) => {
 
 const StickyNote = ({ note, index, wallRef, onMove }) => {
   const noteRef = useRef(null);
-  const x = useMotionValue(note.x_position);
-  const y = useMotionValue(note.y_position);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
   const rotation = NOTE_ROTATIONS[index % NOTE_ROTATIONS.length];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fitNoteToWall = () => {
       const wall = wallRef.current;
       const target = noteRef.current;
@@ -52,9 +103,10 @@ const StickyNote = ({ note, index, wallRef, onMove }) => {
       if (!wall || !target) return;
 
       const wallRect = wall.getBoundingClientRect();
-      const noteRect = target.getBoundingClientRect();
-      const nextX = clamp(note.x_position, 8, Math.max(8, wallRect.width - noteRect.width - 8));
-      const nextY = clamp(note.y_position, 8, Math.max(8, wallRect.height - noteRect.height - 8));
+      const noteWidth = target.offsetWidth || target.getBoundingClientRect().width;
+      const noteHeight = target.offsetHeight || target.getBoundingClientRect().height;
+      const nextX = toPixelPosition(note.x_position, wallRect.width, noteWidth);
+      const nextY = toPixelPosition(note.y_position, wallRect.height, noteHeight);
 
       x.set(nextX);
       y.set(nextY);
@@ -68,20 +120,27 @@ const StickyNote = ({ note, index, wallRef, onMove }) => {
     };
   }, [note.x_position, note.y_position, wallRef, x, y]);
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = () => {
     const wall = wallRef.current;
-    const target = event.currentTarget;
+    const target = noteRef.current;
 
     if (!wall || !target) return;
 
     const wallRect = wall.getBoundingClientRect();
-    const noteRect = target.getBoundingClientRect();
-    const nextX = clamp(noteRect.left - wallRect.left, 8, Math.max(8, wallRect.width - noteRect.width - 8));
-    const nextY = clamp(noteRect.top - wallRect.top, 8, Math.max(8, wallRect.height - noteRect.height - 8));
+    const noteWidth = target.offsetWidth || target.getBoundingClientRect().width;
+    const noteHeight = target.offsetHeight || target.getBoundingClientRect().height;
+    const xBounds = getPositionBounds(wallRect.width, noteWidth);
+    const yBounds = getPositionBounds(wallRect.height, noteHeight);
+    const nextX = clamp(x.get(), xBounds.min, xBounds.max);
+    const nextY = clamp(y.get(), yBounds.min, yBounds.max);
 
     x.set(nextX);
     y.set(nextY);
-    onMove(note.id, nextX, nextY);
+    onMove(
+      note.id,
+      toStoredPosition(nextX, wallRect.width, noteWidth),
+      toStoredPosition(nextY, wallRect.height, noteHeight)
+    );
   };
 
   return (
@@ -97,13 +156,13 @@ const StickyNote = ({ note, index, wallRef, onMove }) => {
       whileDrag={{ scale: 1.04, rotate: 0, zIndex: 30 }}
       onDragEnd={handleDragEnd}
       onDoubleClick={(event) => event.stopPropagation()}
-      className="absolute left-0 top-0 z-10 h-40 w-40 touch-none cursor-grab select-none overflow-hidden rounded-[6px] p-4 shadow-lg active:cursor-grabbing sm:h-44 sm:w-44"
+      className="absolute left-0 top-0 z-10 h-[clamp(7rem,34vw,10rem)] w-[clamp(7rem,34vw,10rem)] touch-none cursor-grab select-none overflow-hidden rounded-[6px] p-3 shadow-lg active:cursor-grabbing sm:h-44 sm:w-44 sm:p-4"
       style={{ x, y, backgroundColor: note.color }}
     >
-      <p className="relative z-10 h-full whitespace-pre-wrap break-words text-sm font-semibold leading-5 text-zinc-800">
+      <p className="relative z-10 h-full whitespace-pre-wrap break-words text-xs font-semibold leading-4 text-zinc-800 sm:text-sm sm:leading-5">
         {note.content}
       </p>
-      <span className="pointer-events-none absolute bottom-0 right-0 h-8 w-8 bg-black/10 [clip-path:polygon(100%_0,0_100%,100%_100%)]" />
+      <span className="pointer-events-none absolute bottom-0 right-0 h-6 w-6 bg-black/10 [clip-path:polygon(100%_0,0_100%,100%_100%)] sm:h-8 sm:w-8" />
     </motion.div>
   );
 };
@@ -226,13 +285,22 @@ const GuestbookNotesWall = () => {
 
     try {
       const supabase = getSupabaseClient();
+      const wall = wallRef.current;
+      const wallRect = wall?.getBoundingClientRect();
+      const noteSize = getResponsiveNoteSize();
+      const xPosition = wallRect
+        ? toStoredPosition(composer.x, wallRect.width, noteSize)
+        : DEFAULT_POSITION_RATIO;
+      const yPosition = wallRect
+        ? toStoredPosition(composer.y, wallRect.height, noteSize)
+        : DEFAULT_POSITION_RATIO;
       const { data, error } = await supabase
         .from('guestbook_notes')
         .insert({
           content: content.slice(0, MAX_NOTE_CHARS),
           color: draft.color,
-          x_position: composer.x,
-          y_position: composer.y,
+          x_position: xPosition,
+          y_position: yPosition,
         })
         .select(selectColumns)
         .single();
@@ -273,9 +341,9 @@ const GuestbookNotesWall = () => {
   return (
     <section
       id="guestbook"
-      className="min-h-screen bg-zinc-50 py-20 text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-white sm:py-28"
+      className="min-h-screen bg-zinc-50 py-16 text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-white sm:py-28"
     >
-      <div className="container mx-auto max-w-6xl px-6 lg:px-8">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
@@ -310,7 +378,7 @@ const GuestbookNotesWall = () => {
           ref={wallRef}
           onDoubleClick={handleCanvasDoubleClick}
           aria-label={t('guestbook.canvasLabel')}
-          className="relative min-h-[520px] overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:min-h-[620px]"
+          className="relative min-h-[440px] overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:min-h-[620px]"
         >
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(113,113,122,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(113,113,122,0.12)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
