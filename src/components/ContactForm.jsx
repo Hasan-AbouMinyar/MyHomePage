@@ -28,7 +28,7 @@ const ContactForm = () => {
   const [status, setStatus] = useState({ type: 'idle', message: '' });
 
   const fieldClass =
-    'w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:text-white dark:focus:border-white';
+    'w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-base text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:text-white dark:focus:border-white sm:text-sm';
 
   const labelClass =
     'mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400';
@@ -124,7 +124,7 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border border-zinc-200 p-5 sm:p-6 dark:border-zinc-800">
+    <form onSubmit={handleSubmit} className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800 sm:p-6">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="contact-name" className={labelClass}>
@@ -228,7 +228,7 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+        className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
       >
         <FaPaperPlane className="h-3.5 w-3.5" />
         {isSubmitting ? t('contact.form.sending') : t('contact.form.send')}

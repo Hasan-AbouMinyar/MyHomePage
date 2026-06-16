@@ -57,7 +57,7 @@ function App() {
     <>
       {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
 
-      <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth scrollbar-none relative">
+      <main className="bg-white dark:bg-black text-gray-800 dark:text-gray-200 antialiased h-[100dvh] overflow-y-scroll scroll-smooth scrollbar-none relative overscroll-y-contain md:snap-y md:snap-mandatory">
         {/* Razor-thin scroll progress bar */}
         <div className="fixed top-0 left-0 right-0 h-[2px] z-50 pointer-events-none">
           <div 
@@ -67,14 +67,14 @@ function App() {
         </div>
 
         <Navbar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
-        <div className="snap-start h-screen w-full relative"><Hero darkMode={darkMode} /></div>
-        <div className="snap-start"><About /></div>
-        <div className="snap-start"><NewSkills /></div>
+        <div className="relative h-[100svh] w-full md:h-screen md:snap-start"><Hero darkMode={darkMode} /></div>
+        <div className="md:snap-start"><About /></div>
+        <div className="md:snap-start"><NewSkills /></div>
         <Projects />
-        <div className="snap-start"><Education /></div>
-        <div className="snap-start"><GuestbookNotesWall /></div>
-        <div className="snap-start"><Contact /></div>
-        <div className="snap-start"><Footer /></div>
+        <div className="md:snap-start"><Education /></div>
+        <div className="md:snap-start"><GuestbookNotesWall /></div>
+        <div className="md:snap-start"><Contact /></div>
+        <div className="md:snap-start"><Footer /></div>
       </main>
     </>
   );

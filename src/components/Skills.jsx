@@ -9,7 +9,7 @@ const NewSkills = () => {
   const softSkills = t('skills.soft') || [];
 
   return (
-    <section id="skills" className="min-h-screen bg-white dark:bg-black text-zinc-800 dark:text-zinc-200 py-24 sm:py-32 flex items-center justify-center transition-colors duration-300">
+    <section id="skills" className="flex min-h-screen items-center justify-center bg-white py-20 text-zinc-800 transition-colors duration-300 dark:bg-black dark:text-zinc-200 sm:py-32">
       <motion.div
         initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
@@ -19,7 +19,7 @@ const NewSkills = () => {
       >
         
         {/* Header */}
-        <div className="mb-16 md:mb-20">
+        <div className="mb-12 md:mb-20">
           <span className="text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase block mb-3">
             {t('skills.title') ? 'CAPABILITIES' : ''}
           </span>
@@ -29,18 +29,18 @@ const NewSkills = () => {
         </div>
 
         {/* 2-Column Split Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-16">
           
           {/* Left Column: Technical Skills (Borderless divider list) */}
-          <div className="md:col-span-7 space-y-8">
+          <div className="space-y-7 md:col-span-7 md:space-y-8">
             <h3 className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pb-2 border-b border-zinc-100 dark:border-zinc-900">
               {t('skills.techTitle')}
             </h3>
-            <div className="space-y-8">
+            <div className="space-y-7 md:space-y-8">
               {technicalSkills.map((skill, index) => (
                 <div
                   key={index}
-                  className="pb-8 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0"
+                  className="border-b border-zinc-100 pb-7 last:border-b-0 dark:border-zinc-900 md:pb-8"
                 >
                   <h4 className="text-lg font-medium text-zinc-900 dark:text-white mb-2.5">
                     {skill.name}
@@ -54,7 +54,7 @@ const NewSkills = () => {
           </div>
 
           {/* Right Column: Soft Skills (Borderless, pure typography list) */}
-          <div className="md:col-span-5 space-y-8">
+          <div className="space-y-7 md:col-span-5 md:space-y-8">
             <h3 className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pb-2 border-b border-zinc-100 dark:border-zinc-900">
               {t('skills.softTitle')}
             </h3>

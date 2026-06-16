@@ -14,7 +14,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-white dark:bg-black text-zinc-400 dark:text-zinc-500 border-t border-zinc-100 dark:border-zinc-900 py-16 md:py-20 transition-colors duration-300">
+    <footer className="w-full border-t border-zinc-100 bg-white py-14 text-zinc-400 transition-colors duration-300 dark:border-zinc-900 dark:bg-black dark:text-zinc-500 md:py-20">
       <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div>
@@ -32,7 +32,7 @@ const Footer = () => {
           <ContactForm />
         </div>
 
-        <div className="mt-12 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-zinc-100 pt-8 text-xs font-medium select-none dark:border-zinc-900">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-100 pt-8 text-center text-xs font-medium select-none dark:border-zinc-900 sm:flex-row sm:text-start">
           <p>
             &copy; {new Date().getFullYear()} {t('name')}. {t('footer.rights')}
           </p>

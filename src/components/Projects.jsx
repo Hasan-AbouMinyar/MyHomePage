@@ -32,36 +32,36 @@ const Projects = () => {
         return (
           <section
             key={index}
-            className="min-h-screen lg:h-screen w-full flex items-center justify-center snap-start relative bg-white dark:bg-black px-6 md:px-12 lg:px-24 py-20 lg:py-0 border-b border-zinc-100 dark:border-zinc-900 last:border-b-0 overflow-hidden"
+            className="relative flex min-h-screen w-full items-center justify-center overflow-hidden border-b border-zinc-100 bg-white px-6 py-20 last:border-b-0 dark:border-zinc-900 dark:bg-black md:px-12 lg:h-screen lg:snap-start lg:px-24 lg:py-0"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
               whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className={`container mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full ${
+              className={`container mx-auto flex h-full max-w-7xl flex-col items-center gap-10 lg:flex-row lg:gap-16 ${
                 isEven ? '' : 'lg:flex-row-reverse'
               }`}
             >
               
               {/* Text Narrative Column */}
-              <div className="w-full lg:w-[38%] xl:w-[35%] flex flex-col justify-center text-left rtl:text-right">
+              <div className="flex w-full flex-col justify-center text-left rtl:text-right lg:w-[38%] xl:w-[35%]">
                 <span className="text-[10px] md:text-xs font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase mb-4 block">
                   {projectLabels[index]}
                 </span>
                 
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white leading-tight mb-4 tracking-tight">
+                <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-white md:text-3xl lg:text-4xl">
                   {project.title}
                 </h3>
                 
-                <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 mb-8 leading-relaxed">
+                <p className="mb-7 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400 md:mb-8 md:text-base">
                   {project.description}
                 </p>
 
                 {/* Numbered Accomplishments Grid */}
-                <div className="space-y-5 mb-8">
+                <div className="mb-7 space-y-4 md:mb-8 md:space-y-5">
                   {project.achievements.map((achievement, i) => (
-                    <div key={i} className="flex gap-4 items-start group">
+                    <div key={i} className="group flex items-start gap-3 md:gap-4">
                       <span className="text-sm font-semibold font-mono text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-250 leading-none select-none">
                         {lang === 'ar' ? `٠${i + 1}` : `0${i + 1}`}
                       </span>
@@ -84,7 +84,7 @@ const Projects = () => {
               </div>
 
               {/* Showcase Image Column */}
-              <div className="w-full lg:w-[62%] xl:w-[65%] flex items-center justify-center">
+              <div className="flex w-full items-center justify-center lg:w-[62%] xl:w-[65%]">
                 <ImageShowcase
                   src={projectImages[index]}
                   title={project.title}

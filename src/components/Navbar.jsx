@@ -63,13 +63,13 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full h-16 border-b border-zinc-100 dark:border-zinc-900 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300">
-      <div className="container mx-auto h-full px-6 flex justify-between items-center max-w-6xl">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 w-full border-b border-zinc-100 bg-white/80 backdrop-blur-md transition-colors duration-300 dark:border-zinc-900 dark:bg-black/80">
+      <div className="container mx-auto flex h-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         {/* Name / Logo */}
         <a 
           href="#hero" 
           onClick={(e) => handleNavClick(e, "hero")}
-          className="text-base font-semibold tracking-tight text-zinc-900 dark:text-white hover:opacity-75 transition-opacity select-none"
+          className="min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-zinc-900 transition-opacity hover:opacity-75 dark:text-white sm:text-base md:flex-none"
         >
           {t('name')}
         </a>
@@ -100,11 +100,11 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
         </nav>
 
         {/* Right side controls */}
-        <div className="flex items-center gap-5">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 md:gap-5">
           {/* Language Toggle (Minimal Text) */}
           <button 
             onClick={toggleLanguage} 
-            className="text-[11px] font-bold tracking-wider text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors duration-200 select-none"
+            className="min-h-10 px-2 text-[11px] font-bold tracking-wider text-zinc-500 transition-colors duration-200 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white sm:px-1"
             title={lang === 'en' ? 'العربية' : 'English'}
           >
             {lang === 'en' ? 'العربية' : 'ENGLISH'}
@@ -113,7 +113,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
           {/* Theme Toggle (Clean Icon) */}
           <button 
             onClick={toggleDarkMode} 
-            className="text-zinc-400 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-white transition-colors duration-200 p-1 flex items-center justify-center"
+            className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors duration-200 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-white md:h-auto md:w-auto md:p-1"
             title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {darkMode ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4.5 h-4.5" />}
@@ -122,7 +122,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
           {/* Mobile Hamburger Menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden flex flex-col justify-center items-center w-6 h-6 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors duration-200"
+            className="flex h-10 w-10 flex-col items-center justify-center text-zinc-500 transition-colors duration-200 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white md:hidden"
             aria-label="Toggle Menu"
           >
             <div className="flex flex-col gap-1 w-5 justify-center items-center">
@@ -136,7 +136,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 border-b border-zinc-150 dark:border-zinc-900 bg-white/95 dark:bg-black/95 backdrop-blur-md py-4 px-6 flex flex-col gap-3 md:hidden shadow-lg">
+        <div className="absolute left-0 right-0 top-16 flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-b border-zinc-150 bg-white/95 px-4 py-3 shadow-lg backdrop-blur-md dark:border-zinc-900 dark:bg-black/95 md:hidden">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
@@ -144,7 +144,7 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={(e) => handleNavClick(e, item.id)}
-                className={`py-2 text-sm font-medium transition-colors select-none ${
+                className={`min-h-11 border-b border-zinc-100 py-3 text-sm font-medium transition-colors last:border-b-0 dark:border-zinc-900 ${
                   isActive
                     ? 'text-zinc-900 dark:text-white font-semibold'
                     : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white'

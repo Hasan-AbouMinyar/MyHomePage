@@ -62,8 +62,8 @@ const Hero = ({ darkMode }) => {
   const { t } = useLanguage();
 
   return (
-    <section id="hero" className="h-screen w-full bg-gradient-to-b from-[#f5f5f7] via-white to-[#f5f5f7] dark:from-black dark:via-[#0c0c0e] dark:to-black relative flex justify-center items-center">
-      <div className="absolute inset-0 z-0">
+    <section id="hero" className="relative flex h-[100svh] w-full items-center justify-center bg-gradient-to-b from-[#f5f5f7] via-white to-[#f5f5f7] dark:from-black dark:via-[#0c0c0e] dark:to-black md:h-screen">
+      <div className="pointer-events-none absolute inset-0 z-0 md:pointer-events-auto">
         <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
           <Suspense fallback={null}>
             <ambientLight intensity={1.5} />
@@ -78,11 +78,11 @@ const Hero = ({ darkMode }) => {
         initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-        className="relative z-10 text-center px-4"
+        className="relative z-10 px-5 text-center"
       >
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-zinc-900 dark:text-white">{t('name')}</h1>
-        <p className="text-lg md:text-2xl mt-4 font-light text-zinc-700 dark:text-zinc-300 max-w-3xl mx-auto">{t('title')}</p>
-        <p className="mt-6 text-base md:text-lg max-w-2xl mx-auto text-zinc-500 dark:text-zinc-400 italic">{t('quote')}</p>
+        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl md:text-7xl">{t('name')}</h1>
+        <p className="mx-auto mt-4 max-w-3xl text-base font-light leading-7 text-zinc-700 dark:text-zinc-300 sm:text-lg md:text-2xl">{t('title')}</p>
+        <p className="mx-auto mt-6 max-w-2xl text-sm leading-6 text-zinc-500 dark:text-zinc-400 sm:text-base md:text-lg italic">{t('quote')}</p>
       </motion.div>
     </section>
   );

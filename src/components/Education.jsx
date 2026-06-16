@@ -7,7 +7,7 @@ const softwareEngineer= new URL('../assets/1.png', import.meta.url).href;
 
 const EducationCard = ({ item, image }) => (
 	<div
-		className="relative flex-shrink-0 w-[320px] h-[560px] rounded-3xl overflow-hidden shadow-2xl group"
+		className="group relative h-[500px] w-[min(82vw,320px)] flex-shrink-0 snap-start overflow-hidden rounded-3xl shadow-2xl sm:h-[560px]"
 	>
 		<img
 			src={image}
@@ -38,7 +38,7 @@ const Education = () => {
 	return (
 		<section
 			id="education"
-			className="min-h-screen bg-white dark:bg-black py-24 sm:py-32 overflow-hidden"
+			className="min-h-screen overflow-hidden bg-white py-20 dark:bg-black sm:py-32"
 		>
 			<motion.div
 				initial={{ opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
@@ -47,15 +47,15 @@ const Education = () => {
 				transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
 				className="container mx-auto px-6 lg:px-8"
 			>
-				<div className="mb-12">
-					<h2 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
+				<div className="mb-10 sm:mb-12">
+					<h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
 						{t('education.title')}
 					</h2>
-					<p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+					<p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400 sm:text-lg">
 						{t('education.subtitle')}
 					</p>
 				</div>
-				<div className="flex overflow-x-auto gap-8 pb-8 scrollbar-none">
+				<div className="scrollbar-none flex snap-x snap-mandatory gap-5 overflow-x-auto pb-8 sm:gap-8">
 					{educationItems.map((item, index) => (
 						<EducationCard 
 							key={index} 
