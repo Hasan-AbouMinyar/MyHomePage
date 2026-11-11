@@ -3,6 +3,39 @@
 
 create extension if not exists pgcrypto;
 
+-- Public digital business card data. This is deliberately separate from the
+-- portfolio UI: both properties can read the same profile record without
+-- duplicating personal/contact information in their front-end source code.
+create table if not exists public.public_profile (
+  id text primary key default 'primary' check (id = 'primary'),
+  full_name text not null,
+  headline text not null,
+  bio text not null,
+  website_url text not null,
+  email text not null,
+  phone text not null,
+  whatsapp_url text not null,
+  avatar_url text not null default '/me.jpg',
+  location text,
+  links jsonb not null default '[]'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+insert into public.public_profile (id, full_name, headline, bio, website_url, email, phone, whatsapp_url, avatar_url, location, links)
+values (
+  'primary', 'Hasan Abouminyar', 'Backend Developer & ERP Systems Engineer',
+  'أبني أنظمة موثوقة وقابلة للتوسع، من المنتجات الرقمية إلى حلول ERP وواجهات API.',
+  'https://abouminyar.ly', 'h.abouminyar@gmail.com', '+218 92 421 4929', 'https://wa.me/218924214929', '/me.jpg', 'Libya',
+  '[{"label":"الموقع الرسمي","url":"https://abouminyar.ly","kind":"website","featured":true},{"label":"LinkedIn","url":"https://www.linkedin.com/in/hasan-abouminyar-8b552b248/","kind":"linkedin","featured":true},{"label":"GitHub","url":"https://github.com/Hasan-AbouMinyar","kind":"github","featured":true},{"label":"Instagram","url":"https://www.instagram.com/_.abouminyar._/","kind":"instagram","featured":false},{"label":"Facebook","url":"https://www.facebook.com/abouminyar/","kind":"facebook","featured":false},{"label":"TikTok","url":"https://www.tiktok.com/@abouminyar","kind":"tiktok","featured":false},{"label":"YouTube","url":"https://www.youtube.com/@abouminyar","kind":"youtube","featured":false}]'::jsonb
+)
+on conflict (id) do nothing;
+
+alter table public.public_profile enable row level security;
+drop policy if exists "public_profile_select_public" on public.public_profile;
+create policy "public_profile_select_public" on public.public_profile
+for select to anon, authenticated using (true);
+grant select on public.public_profile to anon, authenticated;
+
 create table if not exists public.contact_messages (
   id uuid primary key default gen_random_uuid(),
   name text not null check (char_length(btrim(name)) between 2 and 120),

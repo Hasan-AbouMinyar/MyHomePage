@@ -2,6 +2,16 @@
   "rewrites": [
     {
       "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "info.abouminyar.ly"
+        }
+      ],
+      "destination": "/info.html"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
