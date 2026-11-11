@@ -39,7 +39,6 @@ function InfoApp() {
         </header>
 
         <div className="identity-card bento-card">
-          <img className="avatar" src={profile.avatar_url} alt={profile.full_name} />
           <div className="identity-copy">
             <p className="eyebrow">بطاقة رقمية</p>
             <h1>{profile.full_name}</h1>

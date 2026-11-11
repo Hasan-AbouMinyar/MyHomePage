@@ -4,10 +4,12 @@ import {
   FaArchive,
   FaArrowDown,
   FaArrowUp,
+  FaChartPie,
   FaEnvelopeOpen,
   FaEye,
   FaEyeSlash,
   FaInbox,
+  FaLink,
   FaMoon,
   FaPlus,
   FaReply,
@@ -100,6 +102,7 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const [infoLinks, setInfoLinks] = useState([]);
   const [newLink, setNewLink] = useState({ label: '', url: '', kind: 'link' });
   const [filter, setFilter] = useState('all');
+  const [activeView, setActiveView] = useState('overview');
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [busyId, setBusyId] = useState('');
@@ -495,18 +498,46 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
         </div>
       </header>
 
-      <section className="container mx-auto max-w-6xl px-6 py-10">
+      <div className="container mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[210px_minmax(0,1fr)] lg:py-10">
+        <aside className="h-fit rounded-xl border border-zinc-200 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-950/50 lg:sticky lg:top-24">
+          <p className="px-3 pb-3 pt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">Workspace</p>
+          <nav className="flex gap-2 overflow-x-auto lg:flex-col" aria-label="لوحة التحكم">
+            {[
+              ['overview', 'نظرة عامة', FaChartPie],
+              ['inbox', 'الرسائل', FaInbox],
+              ['links', 'روابط البطاقة', FaLink],
+            ].map(([view, label, Icon]) => (
+              <button
+                key={view}
+                type="button"
+                onClick={() => setActiveView(view)}
+                className={`flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-right text-sm font-semibold transition-colors ${
+                  activeView === view
+                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-black'
+                    : 'text-zinc-500 hover:bg-white hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-black dark:hover:text-white'
+                }`}
+              >
+                <Icon className="h-4 w-4" /> {label}
+              </button>
+            ))}
+          </nav>
+          <div className="mt-5 hidden border-t border-zinc-200 px-3 pt-4 text-xs leading-5 text-zinc-400 dark:border-zinc-800 dark:text-zinc-500 lg:block">
+            إدارة الرسائل والروابط المنشورة في بطاقتك الرقمية من مكان واحد.
+          </div>
+        </aside>
+
+      <section className="min-w-0">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
               {profile?.display_name || profile?.email}
             </p>
             <h2 className="mt-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-              {t('admin.inbox')}
+              {activeView === 'links' ? 'روابط البطاقة الرقمية' : activeView === 'overview' ? 'نظرة عامة' : t('admin.inbox')}
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:flex">
+          {activeView !== 'links' && <div className="grid grid-cols-2 gap-2 sm:flex">
             {statusOptions.map((status) => (
               <button
                 key={status}
@@ -521,10 +552,10 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
                 {t(`admin.filters.${status}`)}
               </button>
             ))}
-          </div>
+          </div>}
         </div>
 
-        <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-4">
+        {activeView !== 'links' && <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
             { key: 'total', icon: FaInbox },
             { key: 'new', icon: FaInbox },
@@ -546,7 +577,7 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               </p>
             </div>
           ))}
-        </div>
+        </div>}
 
         {error && (
           <p className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-950 dark:bg-red-950/30 dark:text-red-300">
@@ -554,7 +585,7 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           </p>
         )}
 
-        <section className="mb-10 rounded-xl border border-zinc-200 p-5 dark:border-zinc-800 sm:p-6" dir="rtl">
+        {activeView !== 'inbox' && <section className="mb-10 rounded-xl border border-zinc-200 p-5 dark:border-zinc-800 sm:p-6" dir="rtl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Info subdomain</p>
@@ -603,9 +634,9 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               );
             })}
           </div>
-        </section>
+        </section>}
 
-        <div className="space-y-4">
+        {activeView !== 'links' && <div className="space-y-4">
           {loading && !messages.length ? (
             <div className="rounded-lg border border-zinc-200 p-8 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
               {t('admin.loading')}
@@ -692,8 +723,9 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               {t('admin.noMessages')}
             </div>
           )}
-        </div>
+        </div>}
       </section>
+      </div>
     </main>
   );
 };

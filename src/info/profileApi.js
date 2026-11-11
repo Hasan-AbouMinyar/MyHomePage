@@ -7,7 +7,6 @@ export const fallbackProfile = {
   website_url: 'https://abouminyar.ly',
   email: 'h.abouminyar@gmail.com',
   whatsapp_url: 'https://wa.me/218924214929',
-  avatar_url: '/profile.jpg',
   location: 'Libya',
   links: [
     { label: 'الموقع الرسمي', url: 'https://abouminyar.ly', kind: 'website', featured: true },
@@ -31,7 +30,7 @@ export async function fetchPublicProfile() {
 
   const { data, error } = await getSupabaseClient()
     .from('public_profile')
-    .select('full_name, headline, bio, website_url, email, whatsapp_url, avatar_url, location, links')
+    .select('full_name, headline, bio, website_url, email, whatsapp_url, location, links')
     .eq('id', 'primary')
     .maybeSingle();
 
