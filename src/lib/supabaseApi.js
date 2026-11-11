@@ -216,3 +216,22 @@ export const deleteContactMessage = async (id, token) => {
     },
   });
 };
+
+export const fetchPublicProfileForAdmin = async (token) => {
+  const params = new URLSearchParams({
+    select: 'id,links',
+    id: 'eq.primary',
+  });
+  const profiles = await supabaseRequest(`/rest/v1/public_profile?${params.toString()}`, { token });
+  return profiles?.[0] || null;
+};
+
+export const updatePublicProfileLinks = async (links, token) => {
+  const params = new URLSearchParams({ id: 'eq.primary' });
+  return supabaseRequest(`/rest/v1/public_profile?${params.toString()}`, {
+    method: 'PATCH',
+    body: { links, updated_at: new Date().toISOString() },
+    token,
+    headers: { Prefer: 'return=representation' },
+  });
+};

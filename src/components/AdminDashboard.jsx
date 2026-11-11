@@ -2,14 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FaArchive,
+  FaArrowDown,
+  FaArrowUp,
   FaEnvelopeOpen,
   FaEye,
   FaEyeSlash,
   FaInbox,
   FaMoon,
+  FaPlus,
   FaReply,
   FaSignInAlt,
   FaSignOutAlt,
+  FaSave,
   FaSun,
   FaSyncAlt,
   FaTrash,
@@ -21,12 +25,15 @@ import {
   clearAdminSession,
   deleteContactMessage,
   fetchContactMessages,
+  fetchPublicProfileForAdmin,
   getStoredAdminSession,
   getSupabaseConfigStatus,
   loginAdmin,
   saveAdminSession,
   updateMessageStatus,
+  updatePublicProfileLinks,
 } from '../lib/supabaseApi';
+import { iconFor, linkIconOptions } from '../info/linkIcons';
 import {
   clearRateLimit,
   formatRetryTime,
@@ -90,10 +97,14 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const [profile, setProfile] = useState(null);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [messages, setMessages] = useState([]);
+  const [infoLinks, setInfoLinks] = useState([]);
+  const [newLink, setNewLink] = useState({ label: '', url: '', kind: 'link' });
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [busyId, setBusyId] = useState('');
+  const [linksSaving, setLinksSaving] = useState(false);
+  const [linksError, setLinksError] = useState('');
   const [error, setError] = useState('');
   const [loginError, setLoginError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -130,9 +141,13 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
     setError('');
 
     try {
-      const inboxData = await fetchContactMessages(activeSession.access_token);
+      const [inboxData, infoProfile] = await Promise.all([
+        fetchContactMessages(activeSession.access_token),
+        fetchPublicProfileForAdmin(activeSession.access_token),
+      ]);
       setProfile(activeSession.admin_profile || activeSession.user || null);
       setMessages(inboxData || []);
+      setInfoLinks(Array.isArray(infoProfile?.links) ? infoProfile.links : []);
     } catch (err) {
       if (err.status === 401) {
         clearAdminSession();
@@ -199,6 +214,7 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
     setSession(null);
     setProfile(null);
     setMessages([]);
+    setInfoLinks([]);
   };
 
   const handleStatusUpdate = async (messageId, status) => {
@@ -236,6 +252,61 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       setError(t('admin.actionError'));
     } finally {
       setBusyId('');
+    }
+  };
+
+  const updateInfoLink = (index, field, value) => {
+    setInfoLinks((current) => current.map((link, linkIndex) => (
+      linkIndex === index ? { ...link, [field]: value } : link
+    )));
+  };
+
+  const moveInfoLink = (index, direction) => {
+    const destination = index + direction;
+    if (destination < 0 || destination >= infoLinks.length) return;
+    setInfoLinks((current) => {
+      const next = [...current];
+      [next[index], next[destination]] = [next[destination], next[index]];
+      return next;
+    });
+  };
+
+  const removeInfoLink = (index) => {
+    setInfoLinks((current) => current.filter((_, linkIndex) => linkIndex !== index));
+  };
+
+  const addInfoLink = () => {
+    const label = newLink.label.trim();
+    const url = newLink.url.trim();
+    if (!label || !/^https?:\/\//i.test(url)) {
+      setLinksError('أدخل اسم الرابط ورابطاً كاملاً يبدأ بـ https://');
+      return;
+    }
+    setInfoLinks((current) => [...current, { label, url, kind: newLink.kind, featured: false }]);
+    setNewLink({ label: '', url: '', kind: 'link' });
+    setLinksError('');
+  };
+
+  const saveInfoLinks = async () => {
+    const validLinks = infoLinks.map((link) => ({
+      label: String(link.label || '').trim(),
+      url: String(link.url || '').trim(),
+      kind: iconFor[link.kind] ? link.kind : 'link',
+      featured: Boolean(link.featured),
+    }));
+    if (validLinks.some((link) => !link.label || !/^https?:\/\//i.test(link.url))) {
+      setLinksError('تأكد أن كل رابط يحتوي اسماً ورابطاً كاملاً يبدأ بـ https://');
+      return;
+    }
+    setLinksSaving(true);
+    setLinksError('');
+    try {
+      const updated = await updatePublicProfileLinks(validLinks, session.access_token);
+      setInfoLinks(updated?.[0]?.links || validLinks);
+    } catch (err) {
+      setLinksError(getAdminErrorMessage(err, t));
+    } finally {
+      setLinksSaving(false);
     }
   };
 
@@ -482,6 +553,57 @@ const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             {error}
           </p>
         )}
+
+        <section className="mb-10 rounded-xl border border-zinc-200 p-5 dark:border-zinc-800 sm:p-6" dir="rtl">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Info subdomain</p>
+              <h2 className="mt-1 text-xl font-bold tracking-tight text-zinc-900 dark:text-white">روابط البطاقة الرقمية</h2>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">أضف أي عدد من الروابط، واختر أيقونة كل رابط ثم احفظ التغييرات.</p>
+            </div>
+            <button
+              type="button"
+              onClick={saveInfoLinks}
+              disabled={linksSaving}
+              className="flex h-10 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+            >
+              <FaSave className="h-3.5 w-3.5" />
+              {linksSaving ? 'جارٍ الحفظ...' : 'حفظ الروابط'}
+            </button>
+          </div>
+
+          {linksError && <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-950 dark:bg-red-950/30 dark:text-red-300">{linksError}</p>}
+
+          <div className="mt-5 grid gap-3 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-950 sm:grid-cols-[1fr_1.4fr_170px_auto]">
+            <input value={newLink.label} onChange={(event) => setNewLink((current) => ({ ...current, label: event.target.value }))} placeholder="اسم الرابط" className="min-w-0 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white" />
+            <input value={newLink.url} onChange={(event) => setNewLink((current) => ({ ...current, url: event.target.value }))} placeholder="https://..." dir="ltr" className="min-w-0 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-left text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white" />
+            <select value={newLink.kind} onChange={(event) => setNewLink((current) => ({ ...current, kind: event.target.value }))} className="rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white">
+              {linkIconOptions.map(([kind, label]) => <option key={kind} value={kind}>{label}</option>)}
+            </select>
+            <button type="button" onClick={addInfoLink} className="flex items-center justify-center gap-2 rounded-lg border border-zinc-900 px-4 py-2.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black"><FaPlus /> إضافة</button>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            {infoLinks.map((link, index) => {
+              const Icon = iconFor[link.kind] || iconFor.link;
+              return (
+                <div key={`${link.url}-${index}`} className="grid gap-2 rounded-lg border border-zinc-200 p-3 dark:border-zinc-800 md:grid-cols-[42px_1fr_1.4fr_170px_auto] md:items-center">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300"><Icon /></div>
+                  <input value={link.label || ''} onChange={(event) => updateInfoLink(index, 'label', event.target.value)} aria-label="اسم الرابط" className="min-w-0 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white" />
+                  <input value={link.url || ''} onChange={(event) => updateInfoLink(index, 'url', event.target.value)} aria-label="رابط الموقع" dir="ltr" className="min-w-0 rounded-md border border-zinc-200 bg-white px-3 py-2 text-left text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white" />
+                  <select value={iconFor[link.kind] ? link.kind : 'link'} onChange={(event) => updateInfoLink(index, 'kind', event.target.value)} aria-label="أيقونة الرابط" className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-black dark:focus:border-white">
+                    {linkIconOptions.map(([kind, label]) => <option key={kind} value={kind}>{label}</option>)}
+                  </select>
+                  <div className="flex items-center gap-1">
+                    <button type="button" onClick={() => moveInfoLink(index, -1)} disabled={index === 0} title="نقل للأعلى" className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 disabled:opacity-30 dark:border-zinc-800"><FaArrowUp /></button>
+                    <button type="button" onClick={() => moveInfoLink(index, 1)} disabled={index === infoLinks.length - 1} title="نقل للأسفل" className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 disabled:opacity-30 dark:border-zinc-800"><FaArrowDown /></button>
+                    <button type="button" onClick={() => removeInfoLink(index)} title="حذف الرابط" className="flex h-8 w-8 items-center justify-center rounded-md border border-red-200 text-red-600 dark:border-red-950 dark:text-red-300"><FaTrash /></button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         <div className="space-y-4">
           {loading && !messages.length ? (

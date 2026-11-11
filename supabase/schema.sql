@@ -15,7 +15,7 @@ create table if not exists public.public_profile (
   email text not null,
   phone text not null,
   whatsapp_url text not null,
-  avatar_url text not null default '/me.jpg',
+  avatar_url text not null default '/profile.jpg',
   location text,
   links jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now()
@@ -25,16 +25,37 @@ insert into public.public_profile (id, full_name, headline, bio, website_url, em
 values (
   'primary', 'Hasan Abouminyar', 'Backend Developer & ERP Systems Engineer',
   'أبني أنظمة موثوقة وقابلة للتوسع، من المنتجات الرقمية إلى حلول ERP وواجهات API.',
-  'https://abouminyar.ly', 'h.abouminyar@gmail.com', '+218 92 421 4929', 'https://wa.me/218924214929', '/me.jpg', 'Libya',
-  '[{"label":"الموقع الرسمي","url":"https://abouminyar.ly","kind":"website","featured":true},{"label":"LinkedIn","url":"https://www.linkedin.com/in/hasan-abouminyar-8b552b248/","kind":"linkedin","featured":true},{"label":"GitHub","url":"https://github.com/Hasan-AbouMinyar","kind":"github","featured":true},{"label":"Instagram","url":"https://www.instagram.com/_.abouminyar._/","kind":"instagram","featured":false},{"label":"Facebook","url":"https://www.facebook.com/abouminyar/","kind":"facebook","featured":false},{"label":"TikTok","url":"https://www.tiktok.com/@abouminyar","kind":"tiktok","featured":false},{"label":"YouTube","url":"https://www.youtube.com/@abouminyar","kind":"youtube","featured":false}]'::jsonb
+  'https://abouminyar.ly', 'h.abouminyar@gmail.com', '+218 92 421 4929', 'https://wa.me/218924214929', '/profile.jpg', 'Libya',
+  '[{"label":"الموقع الرسمي","url":"https://abouminyar.ly","kind":"website","featured":true},{"label":"LinkedIn","url":"https://www.linkedin.com/in/hasan-abouminyar-8b552b248/","kind":"linkedin","featured":true},{"label":"GitHub","url":"https://github.com/Hasan-AbouMinyar","kind":"github","featured":true},{"label":"Instagram","url":"https://www.instagram.com/_.abouminyar._/","kind":"instagram","featured":false},{"label":"Facebook","url":"https://www.facebook.com/abouminyar/","kind":"facebook","featured":false},{"label":"TikTok","url":"https://www.tiktok.com/@abouminyar","kind":"tiktok","featured":false},{"label":"YouTube","url":"https://www.youtube.com/@abouminyar","kind":"youtube","featured":false},{"label":"Snapchat","url":"https://snapchat.com/t/nMh6n7My","kind":"snapchat","featured":false}]'::jsonb
 )
 on conflict (id) do nothing;
+
+-- Existing installations keep the new portrait without modifying other profile data.
+update public.public_profile
+set avatar_url = '/profile.jpg', updated_at = now()
+where id = 'primary' and avatar_url <> '/profile.jpg';
+
+-- Keep existing installations in sync with the newly added Snapchat link.
+update public.public_profile
+set links = links || '[{"label":"Snapchat","url":"https://snapchat.com/t/nMh6n7My","kind":"snapchat","featured":false}]'::jsonb,
+    updated_at = now()
+where id = 'primary'
+  and not exists (
+    select 1
+    from jsonb_array_elements(links) as link
+    where link->>'url' = 'https://snapchat.com/t/nMh6n7My'
+  );
 
 alter table public.public_profile enable row level security;
 drop policy if exists "public_profile_select_public" on public.public_profile;
 create policy "public_profile_select_public" on public.public_profile
 for select to anon, authenticated using (true);
 grant select on public.public_profile to anon, authenticated;
+
+drop policy if exists "public_profile_update_authenticated" on public.public_profile;
+create policy "public_profile_update_authenticated" on public.public_profile
+for update to authenticated using (true) with check (true);
+grant update on public.public_profile to authenticated;
 
 create table if not exists public.contact_messages (
   id uuid primary key default gen_random_uuid(),

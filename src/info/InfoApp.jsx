@@ -3,24 +3,14 @@ import {
   FaArrowUpRightFromSquare,
   FaBriefcase,
   FaEnvelope,
-  FaFacebookF,
   FaGithub,
   FaGlobe,
-  FaInstagram,
-  FaLinkedinIn,
   FaMoon,
-  FaPhone,
   FaSun,
-  FaTiktok,
   FaWhatsapp,
-  FaYoutube,
 } from 'react-icons/fa6';
 import { fetchPublicProfile, fallbackProfile } from './profileApi';
-
-const iconFor = {
-  website: FaGlobe, linkedin: FaLinkedinIn, github: FaGithub, instagram: FaInstagram,
-  facebook: FaFacebookF, tiktok: FaTiktok, youtube: FaYoutube, whatsapp: FaWhatsapp,
-};
+import { iconFor } from './linkIcons';
 
 function InfoApp() {
   const [profile, setProfile] = useState(fallbackProfile);
@@ -63,7 +53,6 @@ function InfoApp() {
           <a className="action-card primary" href={profile.website_url} target="_blank" rel="noreferrer"><FaGlobe /><span><small>اكتشف أعمالي</small>الموقع الرسمي</span><FaArrowUpRightFromSquare className="arrow" /></a>
           <a className="action-card" href={`mailto:${profile.email}`}><FaEnvelope /><span><small>راسلني مباشرة</small>{profile.email}</span></a>
           <a className="action-card" href={profile.whatsapp_url} target="_blank" rel="noreferrer"><FaWhatsapp /><span><small>تواصل سريع</small>WhatsApp</span></a>
-          <a className="action-card" href={`tel:${profile.phone.replace(/\s/g, '')}`}><FaPhone /><span><small>اتصال</small>{profile.phone}</span></a>
         </div>
 
         <section className="social-card bento-card">

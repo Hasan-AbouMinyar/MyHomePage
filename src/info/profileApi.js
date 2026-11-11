@@ -6,9 +6,8 @@ export const fallbackProfile = {
   bio: 'أبني أنظمة موثوقة وقابلة للتوسع، من المنتجات الرقمية إلى حلول ERP وواجهات API.',
   website_url: 'https://abouminyar.ly',
   email: 'h.abouminyar@gmail.com',
-  phone: '+218 92 421 4929',
   whatsapp_url: 'https://wa.me/218924214929',
-  avatar_url: '/me.jpg',
+  avatar_url: '/profile.jpg',
   location: 'Libya',
   links: [
     { label: 'الموقع الرسمي', url: 'https://abouminyar.ly', kind: 'website', featured: true },
@@ -18,6 +17,7 @@ export const fallbackProfile = {
     { label: 'Facebook', url: 'https://www.facebook.com/abouminyar/', kind: 'facebook', featured: false },
     { label: 'TikTok', url: 'https://www.tiktok.com/@abouminyar', kind: 'tiktok', featured: false },
     { label: 'YouTube', url: 'https://www.youtube.com/@abouminyar', kind: 'youtube', featured: false },
+    { label: 'Snapchat', url: 'https://snapchat.com/t/nMh6n7My', kind: 'snapchat', featured: false },
   ],
 };
 
@@ -31,7 +31,7 @@ export async function fetchPublicProfile() {
 
   const { data, error } = await getSupabaseClient()
     .from('public_profile')
-    .select('full_name, headline, bio, website_url, email, phone, whatsapp_url, avatar_url, location, links')
+    .select('full_name, headline, bio, website_url, email, whatsapp_url, avatar_url, location, links')
     .eq('id', 'primary')
     .maybeSingle();
 
