@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/",
       "has": [
         {
           "type": "host",
-          "value": "info.abouminyar.ly"
+          "value": "^info\\.abouminyar\\.ly$"
         }
       ],
       "destination": "/info.html"
