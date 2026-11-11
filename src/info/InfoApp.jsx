@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   FaArrowUpRightFromSquare,
-  FaBriefcase,
+  FaArrowDown,
   FaEnvelope,
-  FaGithub,
   FaGlobe,
   FaMoon,
   FaSun,
@@ -11,6 +10,7 @@ import {
 } from 'react-icons/fa6';
 import { fetchPublicProfile, fallbackProfile } from './profileApi';
 import { iconFor } from './linkIcons';
+import GravityTrail from './GravityTrail';
 
 function InfoApp() {
   const [profile, setProfile] = useState(fallbackProfile);
@@ -28,34 +28,36 @@ function InfoApp() {
 
   return (
     <main className="info-page" dir="rtl">
-      <div className="info-orb info-orb-one" />
-      <div className="info-orb info-orb-two" />
+      <GravityTrail />
+      <div className="info-noise" />
       <section className="info-shell">
         <header className="info-header">
-          <a className="info-mark" href={profile.website_url} aria-label="الموقع الرسمي">HA<span>.</span></a>
+          <a className="info-mark" href={profile.website_url} aria-label="الموقع الرسمي"><span className="mark-dot" />HA<span>.</span></a>
           <button className="theme-button" type="button" onClick={() => setDark((current) => !current)} aria-label="تبديل المظهر">
             {dark ? <FaSun /> : <FaMoon />}
           </button>
         </header>
 
-        <div className="identity-card bento-card">
+        <div className="identity-card bento-card reveal-up">
+          <div className="identity-aurora" />
           <div className="identity-copy">
-            <p className="eyebrow">بطاقة رقمية</p>
+            <div className="eyebrow"><span className="status-dot" /> متاح للتعاون والمشاريع</div>
             <h1>{profile.full_name}</h1>
             <p className="headline">{profile.headline}</p>
             <p className="bio">{profile.bio}</p>
-            <p className="location">{profile.location}</p>
+            <div className="identity-meta"><span>{profile.location}</span><span>•</span><span>Digital Card</span></div>
           </div>
+          <FaArrowDown className="scroll-cue" />
         </div>
 
-        <div className="action-grid">
-          <a className="action-card primary" href={profile.website_url} target="_blank" rel="noreferrer"><FaGlobe /><span><small>اكتشف أعمالي</small>الموقع الرسمي</span><FaArrowUpRightFromSquare className="arrow" /></a>
-          <a className="action-card" href={`mailto:${profile.email}`}><FaEnvelope /><span><small>راسلني مباشرة</small>{profile.email}</span></a>
-          <a className="action-card" href={profile.whatsapp_url} target="_blank" rel="noreferrer"><FaWhatsapp /><span><small>تواصل سريع</small>WhatsApp</span></a>
+        <div className="action-grid reveal-up delay-one">
+          <a className="action-card primary" href={profile.website_url} target="_blank" rel="noreferrer"><FaGlobe /><span><small>Portfolio · Case studies</small>اكتشف موقعي الرسمي</span><FaArrowUpRightFromSquare className="arrow" /></a>
+          <a className="action-card" href={`mailto:${profile.email}`}><FaEnvelope /><span><small>راسلني مباشرة</small>{profile.email}</span><FaArrowUpRightFromSquare className="mini-arrow" /></a>
+          <a className="action-card whatsapp" href={profile.whatsapp_url} target="_blank" rel="noreferrer"><FaWhatsapp /><span><small>متواجد للرد</small>WhatsApp</span><FaArrowUpRightFromSquare className="mini-arrow" /></a>
         </div>
 
-        <section className="social-card bento-card">
-          <div className="section-title"><FaBriefcase /><h2>تواصل معي</h2><span>{socialLinks.length} منصات</span></div>
+        <section className="social-card bento-card reveal-up delay-two">
+          <div className="section-title"><div><span className="section-overline">FOLLOW THE WORK</span><h2>روابط ومنصات التواصل</h2></div><span className="platform-count">{socialLinks.length.toString().padStart(2, '0')} منصة</span></div>
           <div className="social-grid">
             {socialLinks.map((link) => {
               const Icon = iconFor[link.kind] || FaGlobe;
@@ -63,7 +65,7 @@ function InfoApp() {
             })}
           </div>
         </section>
-        <footer>© {new Date().getFullYear()} {profile.full_name}</footer>
+        <footer><span>© {new Date().getFullYear()} {profile.full_name}</span><span>صُممت بعناية في ليبيا</span></footer>
       </section>
     </main>
   );
